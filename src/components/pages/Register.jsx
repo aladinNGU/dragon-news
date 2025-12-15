@@ -1,10 +1,30 @@
-import React from "react";
+import React, { use } from "react";
 import { Link } from "react-router";
+import { AuthContext } from "../../provider/Authprovider";
 
 const Register = () => {
+  const { createUser, setUser } = use(AuthContext);
+
   const handleRegister = (e) => {
     e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const photo = form.photo.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    console.log(name, photo, email, password);
+
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        // console.log(user);
+        setUser(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
   return (
     <div className="flex justify-center items-center">
       <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -25,7 +45,7 @@ const Register = () => {
             {/* Photo URL */}
             <label className="label">Photo</label>
             <input
-              type="photo"
+              type="text"
               name="photo"
               className="input"
               placeholder="Photo"
